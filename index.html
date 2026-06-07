@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Event Menu Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans pb-12">
+
+    <div class="max-w-4xl mx-auto px-4 mt-8">
+        <header class="text-center bg-indigo-600 text-white rounded-xl p-6 shadow-md mb-8">
+            <h1 class="text-3xl font-bold">Party Menu Finalizer</h1>
+            <p class="text-sm text-indigo-200 mt-1">Select items, compile your menu, and submit to save your draft automatically.</p>
+        </header>
+
+        <section class="bg-white p-6 rounded-xl shadow-sm border mb-8">
+            <h2 class="text-xl font-semibold border-b pb-2 mb-4 text-gray-700">1. Event Coordination Details</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Host Name / Event Name</label>
+                    <input type="text" id="hostName" class="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-400 outline-none" placeholder="e.g. Verma Family Dinner">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Date of the Event</label>
+                    <input type="date" id="eventDate" class="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-400 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Approx Guest Count</label>
+                    <input type="number" id="guestCount" class="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-400 outline-none" placeholder="e.g. 50">
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white p-6 rounded-xl shadow-sm border mb-8">
+            <h2 class="text-xl font-semibold border-b pb-2 mb-4 text-gray-700">2. Select Your Menu Items</h2>
+            <div id="menuContainer" class="space-y-6">
+                </div>
+        </section>
+
+        <section class="bg-white p-6 rounded-xl shadow-sm border mb-8">
+            <h2 class="text-xl font-semibold border-b pb-2 mb-2 text-gray-700">3. Kitchen Notes & Instructions</h2>
+            <textarea id="specialInstructions" rows="3" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-400 outline-none mb-4" placeholder="Mention preferences like Less Spicy, Jain options, serving time timelines..."></textarea>
+
+            <button onclick="generateMenuSummary()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-lg shadow transition duration-200">
+                Compile & Save Menu Draft
+            </button>
+        </section>
+
+        <section id="summaryPanel" class="bg-white p-6 rounded-xl shadow-sm border hidden transition duration-300">
+            <div class="flex justify-between items-center border-b pb-2 mb-4">
+                <h2 class="text-xl font-semibold text-gray-700">Generated Order Document</h2>
+                <span class="text-xs font-semibold bg-amber-100 text-amber-800 py-1 px-2.5 rounded-full" id="saveStatus">Document Staged</span>
+            </div>
+            
+            <textarea id="menuTextOutput" rows="12" class="w-full font-mono text-sm border bg-gray-50 rounded-lg p-4 focus:ring-2 focus:ring-indigo-400 outline-none mb-4"></textarea>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <button onclick="copyToClipboard()" class="bg-gray-800 hover:bg-gray-900 text-white py-2.5 px-4 rounded-lg font-medium transition flex items-center justify-center gap-2">
+                    Copy to Clipboard
+                </button>
+                <button onclick="shareToWhatsApp()" class="bg-green-600 hover:bg-green-700 text-white py-2.5 px-4 rounded-lg font-medium transition flex items-center justify-center gap-2">
+                    Send to WhatsApp
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <script src="menuData.js"></script>
+    <script>
+        // REPLACE THIS URL with your generated Google Web App URL once Step 3 is completed.
+        const GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz0FrAYDy97L_v5sacm00vIzJEDbf3uz-fVi4Ys0PBdZFni6FGGHkrmhiDg4eF4cmVn/exec';
+
+        // Render sections dynamically from your imported database configuration
+        document.addEventListener("DOMContentLoaded", () => {
+            const container = document.getElementById('menuContainer');
+            
+            for (const [category, items] of Object.entries(menuData)) {
+                const catId = category.replace(/[^A-Z0-9]/ig, "_");
+                
+                let htmlBlock = `
+                    <div class="border rounded-xl p-4 bg-gray-50/50">
+                        <h3 class="font-bold text-md text-indigo-900 mb-3 tracking-wide border-b pb-1">${category}</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                `;
+
+                items.forEach((item, index) => {
+                    htmlBlock += `
+                        <label class="flex items-start gap-2 p-2 bg-white rounded-lg border shadow-xs hover:border-indigo-200 cursor-pointer text-sm">
+                            <input type="checkbox" name="${catId}" value="${item}" class="mt-0.5 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                            <span class="text-gray-700 font-medium select-none">${item}</span>
+                        </label>
+                    `;
+                });
+
+                htmlBlock += `</div></div>`;
+                container.insertAdjacentHTML('beforeend', htmlBlock);
+            }
+        });
+
+        // Loop compilation structure matching selections and dynamically creating an editable plaintext receipt layout
+        function generateMenuSummary() {
+            const host = document.getElementById('hostName').value.trim() || 'Valued Guest';
+            const date = document.getElementById('eventDate').value || 'Not specified';
+            const guests = document.getElementById('guestCount').value || 'TBD';
+            const notes = document.getElementById('specialInstructions').value.trim() || 'None';
+
+            if(!document.getElementById('hostName').value || !document.getElementById('eventDate').value) {
+                alert('Please enter a Host Name and Event Date before processing.');
+                return;
+            }
+
+            let structuredItems = '';
+            let payloadObject = {};
+
+            for (const [category, items] of Object.entries(menuData)) {
+                const catId = category.replace(/[^A-Z0-9]/ig, "_");
+                const checkedBoxes = document.querySelectorAll(`input[name="${catId}"]:checked`);
+                
+                if (checkedBoxes.length > 0) {
+                    structuredItems += `\n[${category}]\n`;
+                    payloadObject[category] = [];
+                    checkedBoxes.forEach(box => {
+                        structuredItems += `- ${box.value}\n`;
+                        payloadObject[category].push(box.value);
+                    });
+                }
+            }
+
+            if(structuredItems === '') {
+                alert('Please check at least one dish menu item to draft a file layout compilation.');
+                return;
+            }
+
+            // Design visual text summary template
+            const finalReceiptString = `EVENT MENU PLAN\n=========================\nHost Name: ${host}\nEvent Date: ${date}\nGuest Count: ${guests}\n-------------------------\nSelected Items:${structuredItems}\n-------------------------\nSpecial Instructions:\n${notes}\n=========================`;
+            
+            document.getElementById('menuTextOutput').value = finalReceiptString;
+            document.getElementById('summaryPanel').classList.remove('hidden');
+            document.getElementById('summaryPanel').scrollIntoView({ behavior: 'smooth' });
+
+            // Post back seamlessly to backend architecture
+            postToDatabase({
+                hostName: host,
+                eventDate: date,
+                guestCount: guests,
+                notes: notes,
+                compiledMenu: structuredItems
+            });
+        }
+
+        function copyToClipboard() {
+            const txt = document.getElementById('menuTextOutput');
+            txt.select();
+            document.execCommand('copy');
+            alert('Menu layout successfully copied into clipboard!');
+        }
+
+        function shareToWhatsApp() {
+            const textContent = document.getElementById('menuTextOutput').value;
+            const targetUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(textContent)}`;
+            window.open(targetUrl, '_blank');
+        }
+
+        // Handles async requests natively to Google Sheets bridge engine without structural breaks
+        function postToDatabase(payload) {
+            const statusBadge = document.getElementById('saveStatus');
+            statusBadge.innerText = "Syncing with Cloud Database...";
+            statusBadge.className = "text-xs font-semibold bg-blue-100 text-blue-800 py-1 px-2.5 rounded-full";
+
+            if(GOOGLE_APP_SCRIPT_URL.includes("XXXXX")) {
+                statusBadge.innerText = "Staged Locally (Setup Sheets App URL)";
+                statusBadge.className = "text-xs font-semibold bg-amber-100 text-amber-800 py-1 px-2.5 rounded-full";
+                return;
+            }
+
+            fetch(GOOGLE_APP_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                statusBadge.innerText = "Saved to Cloud Excel Successfully!";
+                statusBadge.className = "text-xs font-semibold bg-green-100 text-green-800 py-1 px-2.5 rounded-full";
+            })
+            .catch(err => {
+                console.error(err);
+                statusBadge.innerText = "Sync Connection Error";
+                statusBadge.className = "text-xs font-semibold bg-red-100 text-red-800 py-1 px-2.5 rounded-full";
+            });
+        }
+    </script>
+</body>
+</html>
