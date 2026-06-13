@@ -13,7 +13,7 @@ const menuData = {
         "29. Paneer Malai Tikka", "30. Paneer Achari Tikka", "31. Paneer Haryali Tikka", 
         "32. Paneer Chilli", "33. Paneer Schezwan", "34. Honey Chilli Potato", "35. Paneer Pepper Fry", 
         "36. Paneer Salt & Pepper", "37. Stuffed Mushroom", "38. Cheese Corn Ball", 
-        "39. Soya Chilli", "40. Soya Chaap Tikka", "41. Soya Malai Chaap", "42. Assorted Veg Platter", "43. Besan Chilla", "44. Moong Daal Chilla"
+        "39. Soya Chilli", "40. Soya Chaap Tikka", "41. Soya Malai Chaap", "42. Assorted Veg Platter", "43. Besan Chilla", "44. Moong Daal Chilla",
         "45. Tikki Chat", "45A. Samosa Chat", "46. Gol gappa", 
     ],
     "CHICKEN STARTERS": [
