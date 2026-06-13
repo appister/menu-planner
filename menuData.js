@@ -11,9 +11,10 @@ const menuData = {
         "21. Crispy Corn", "22. Veg Crispy", "23. Veg Manchurian", "24. Hara Bhara Kabab", 
         "25. Veg 65", "26. Tandoori Aloo", "27. Tandoori Mushroom", "28. Tandoori Gobi", 
         "29. Paneer Malai Tikka", "30. Paneer Achari Tikka", "31. Paneer Haryali Tikka", 
-        "32. Paneer Chilli", "33. Paneer Schezwan", "34. Paneer 65", "35. Paneer Pepper Fry", 
+        "32. Paneer Chilli", "33. Paneer Schezwan", "34. Honey Chilli Potato", "35. Paneer Pepper Fry", 
         "36. Paneer Salt & Pepper", "37. Stuffed Mushroom", "38. Cheese Corn Ball", 
-        "39. Soya Chilli", "40. Soya Chaap Tikka", "41. Soya Malai Chaap", "42. Assorted Veg Platter"
+        "39. Soya Chilli", "40. Soya Chaap Tikka", "41. Soya Malai Chaap", "42. Assorted Veg Platter", "43. Besan Chilla", "44. Moong Daal Chilla"
+        "45. Tikki Chat", "45A. Samosa Chat", "46. Gol gappa", 
     ],
     "CHICKEN STARTERS": [
         "43. Chicken Tikka", "44. Chicken Tandoori (Half)", "45. Chicken Tandoori (Full)", 
@@ -90,17 +91,18 @@ const menuData = {
         "264. Marua (Ragi) Roti", "265. Gur Pitha"
     ],
     "DESSERT": [
-        "276. Ice Cream (Vanilla/Chocolate)", "277. Gulab Jamun (2 Pcs)", "278. Rasgulla (2 Pcs)", 
-        "279. Rasmalai (2 Pcs)", "280. Kheer", "281. Gajar Ka Halwa (Seasonal)", "282. Moong Dal Halwa", 
-        "283. Fried Ice Cream", "284. Brownie with Ice Cream", "285. Brownie"
+        "276. Ice Cream (Vanilla/Chocolate)", "277. Gulab Jamun", "278. Rasgulla", 
+        "279. Rasmalai", "280. Gur Kheer", "280A. Normal Sugar Kheer", "281. Gajar Ka Halwa (Seasonal)", "282. Moong Dal Halwa", 
+        "283. Fried Ice Cream", "284. Brownie with Ice Cream", "285. Brownie", 
     ],
     "BEVERAGES": [
-        "286. Tea (Plain/Masala)", "287. Coffee", "288. Lemon Tea", "289. Lemon Soda (Salt/Sweet)", 
+        "286. Tea (Plain/Masala)", "287. Milk Coffee", "287A. Black Coffee", "288. Lemon Tea", "289. Lemon Soda (Salt/Sweet)", 
         "290. Fresh Lime Water", "291. Cold Drinks (Can/Pet)", "292. Salted Lassi", "293. Sweet Lassi", 
         "294. Buttermilk (Chaas)", "295. Jeera Soda", "296. Saffron Lassi", "297. Mango Lassi", 
         "298. Packaged Drinking Water", "299. Mineral Water", "300. Vanilla Shake", "301. Chocolate Shake", 
         "302. Strawberry Shake", "303. Dry Fruit Shake", "304. Virgin Mojito", "305. Blue Lagoon", 
-        "306. Carbonated Mocktail", "307. Spiced Buttermilk"
+        "306. Carbonated Mocktail", "307. Spiced Buttermilk", "308A. Sugarcane Juice", "308B. Bel Juice", "308C. Water melon Juice", 
+        "309. Aam Panna",
     ],
     "SOUTH INDIAN": [
         "310. Plain Idli (2 Pcs)", "311. Mini Idli (Sambar)", "312. Fried Idli", "313. Rava Idli", 
@@ -110,7 +112,7 @@ const menuData = {
         "324. Rava Masala Dosa", "325. Set Dosa", "326. Spring Dosa", "327. Sweet Dosa", 
         "328. Chicken Masala Dosa", "329. Egg Dosa", "330. Plain Uttapam", "331. Tomato Uttapam", 
         "332. Vegetable Uttapam", "333. Cheese Uttapam", "334. Onion Uttapam", "335. Paneer Uttapam", 
-        "336. Mix Veg Uttapam", "337. Medu Vada (2 Pcs)", "338. Sambar Vada", "339. Dahi Vada"
+        "336. Mix Veg Uttapam", "337. Medu Vada (2 Pcs)", "338. Sambar Vada", "339. Dahi Vada", "340. Appam",
     ],
     "SPECIAL CHEF RECOMMENDATIONS": [
         "358. Patrani Machhi", "359. Jhange Masala (Prawns)", "360. Chicken Bharta", 
